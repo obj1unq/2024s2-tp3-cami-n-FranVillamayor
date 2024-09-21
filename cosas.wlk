@@ -44,13 +44,13 @@ object paqueteLadrillos {
 		return cantLadrillos * 2
 	}
 	method cantBultos() {
-		return if(cantLadrillos > 300) {3}
-		else if (100>cantLadrillos <= 300 ){2}
+		return if(cantLadrillos < 100) {1}
+		else if (cantLadrillos < 300) {2}
 		else {1}
 	}
 }
 object arenaAGranel {
-	var property peso = 0 
+	var property peso = 1
 	method nivelPeligrosidad() {return 1}
 	method cantBultos() {return 1}
 	method reaccionar() {

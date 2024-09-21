@@ -7,7 +7,7 @@ object camion {
 		
 	method cargar(unaCosa) {
 		cosas.add(unaCosa)
-		cosas.forEach({cosa => cosa.reaccionar()})
+		unaCosa.reaccionar()
 	}
 
 	method descargar(cosa) {
@@ -33,7 +33,7 @@ object camion {
 	}
 
 	method pesoTotal() { //es la suma del peso del camión vacío (tara) y su carga. La tara del camión es de 1000 kilos.
-	    return cosas.sum() + 1000
+	    return cosas.sum({cosa => cosa.peso()}) + 1000
 	}
 
 	method excedidoDePeso() { //indica si el peso total es superior al peso máximo, que es de 2500 kilos.
@@ -41,15 +41,15 @@ object camion {
 	}
 
 	method objetosQueSuperanPeligrosidad(nivel) { //devuelve una colección con los objetos cargados que superan el nivel de peligrosidad indicado.
-	    return cosas.map({cosa => cosa.nivelPeligrosidad() > nivel})
+	    return cosas.filter({cosa => cosa.nivelPeligrosidad() > nivel})
 	}
 
 	method objetosMasPeligrososQue(cosa) { //devuelve una colección con los objetos cargados que son más peligrosos que la cosa indicada.
-	    return cosas.map({cosa => cosa.nivelPeligrosidad() > cosa.nivelPeligrosidad()})
+	    return cosas.filter({cosa => cosa.nivelPeligrosidad() > cosa.nivelPeligrosidad()})
 	}
 
 	method puedeCircularEnRuta(nivelMaximoPeligrosidad) { //Puede circular si no está excedido de peso, y además, ninguno de los objetos cargados supera el nivel máximo de peligrosidad indicado.
-	    return not self.excedidoDePeso() and not self.objetosQueSuperanPeligrosidad(nivelMaximoPeligrosidad)
+	    return not self.excedidoDePeso() and self.objetosQueSuperanPeligrosidad(nivelMaximoPeligrosidad) == #{}
 	}
 
 	method tieneAlgoQuePesaEntre(min, max) { //indica si el peso de alguna de las cosas que tiene el camión está en ese intervalo
@@ -71,13 +71,13 @@ object camion {
 
 	method transportar(destino, camino) {
 		self.validarCamion()
-		camino.soportaElCamino()
-		destino.irADestino()
+		camino.validarCamino(self)
+		destino.irADestino(self)
 		self.descargarCompleto()
 	}
 
 	method descargarCompleto() {
-		cosas.removeAll(cosas)
+		cosas.clear()
 	  
 	}
 

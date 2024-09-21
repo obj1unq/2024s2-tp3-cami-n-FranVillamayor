@@ -6,12 +6,12 @@ import cosas.*
 object almacen {
     const property cosas = #{} 
 
-    method irADestino() {
+    method irADestino(camion) {
         self.validarBultos()
-        self.descargarCamion()
+        self.descargarCamion(camion)
 	}
 
-    method descargarCamion() {
+    method descargarCamion(camion) {
         cosas.addAll(camion.cosas())
     }
 

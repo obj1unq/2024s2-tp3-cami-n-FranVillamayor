@@ -1,0 +1,42 @@
+import camino.*
+import destino.*
+import cosas.*
+import camion.*
+
+describe "transporte" { // Entrego solo con este test
+  test "transporte exitoso camino ruta 9" {
+    camion.cargar(paqueteLadrillos)
+
+    camion.transportar(almacen, ruta9)
+
+    assert.equals(#{}, camion.cosas())
+    
+  }
+
+  test "transporte exitoso camino Vecinal " {
+    camion.cargar(paqueteLadrillos)
+
+    camion.transportar(almacen, ruta9)
+
+    assert.equals(#{}, camion.cosas())
+    
+  }
+
+  test "transporte sin exito por ruta 9"{
+    camion.cargar(arenaAGranel)
+    camion.cargar(paqueteLadrillos)
+    camion.cargar(residuosRadioactivos)
+
+    assert.throwsException({ camion.transportar(almacen, ruta9)})
+  }
+
+  test "transporte sin exito por camino Vecinal"{
+    camion.cargar(arenaAGranel)
+    camion.cargar(paqueteLadrillos)
+    camion.cargar(residuosRadioactivos)
+
+    assert.throwsException({ camion.transportar(almacen, caminoVecinal)})
+  }
+}
+
+// Me faltarian sumar más test 
