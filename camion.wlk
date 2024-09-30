@@ -4,6 +4,8 @@ import destino.*
 
 object camion {
 	const property cosas = #{}
+	var property tara = 1000
+	var property pesoMaximo = 2500
 		
 	method cargar(unaCosa) {
 		cosas.add(unaCosa)
@@ -16,12 +18,7 @@ object camion {
 	}
 
 	method todoPesoPar() { //si el peso de cada uno de los objetos cargados es un número par.
-	    return cosas.all({cosa => self.esPar(cosa.peso())})
-	}
-
-	method esPar(peso) {
-		return peso % 2 == 0
-	  
+	    return cosas.all({cosa => cosa.peso().even()})
 	}
 
 	method hayAlgunoQuePesa(peso) { //indica si hay alguno de los objetos cargados que tiene exactamente el peso indicado.
@@ -29,15 +26,24 @@ object camion {
 	}
 
 	method elDeNivel(nivel) { //devuelve el primer objeto cargado que encuentre, cuyo nivel de peligrosidad coincida exactamente con el valor indicado.
-	    return cosas.find({cosa => cosa.nivel() == nivel})
+	    self.validarNivel(nivel)
+		return cosas.find({cosa => cosa.nivelPeligrosidad() == nivel})
+	}
+	method validarNivel(nivel) {
+		if(not self.contieneCosaDeNivel(nivel)){
+			self.error("no contiene cosa de ese nivel de peligrosidad")
+		}
+	}
+	method contieneCosaDeNivel(nivel) {
+		return cosas.any({cosa => cosa.nivelPeligrosidad() == nivel})
 	}
 
 	method pesoTotal() { //es la suma del peso del camión vacío (tara) y su carga. La tara del camión es de 1000 kilos.
-	    return cosas.sum({cosa => cosa.peso()}) + 1000
+	    return cosas.sum({cosa => cosa.peso()}) + self.tara()
 	}
 
 	method excedidoDePeso() { //indica si el peso total es superior al peso máximo, que es de 2500 kilos.
-	    return self.pesoTotal() > 2500
+	    return self.pesoTotal() > self.pesoMaximo()
 	}
 
 	method objetosQueSuperanPeligrosidad(nivel) { //devuelve una colección con los objetos cargados que superan el nivel de peligrosidad indicado.
@@ -45,7 +51,7 @@ object camion {
 	}
 
 	method objetosMasPeligrososQue(cosa) { //devuelve una colección con los objetos cargados que son más peligrosos que la cosa indicada.
-	    return cosas.filter({cosa => cosa.nivelPeligrosidad() > cosa.nivelPeligrosidad()})
+	    return self.objetosQueSuperanPeligrosidad(cosa.nivelPeligrosidad())
 	}
 
 	method puedeCircularEnRuta(nivelMaximoPeligrosidad) { //Puede circular si no está excedido de peso, y además, ninguno de los objetos cargados supera el nivel máximo de peligrosidad indicado.

@@ -3,7 +3,103 @@ import destino.*
 import cosas.*
 import camion.*
 
-describe "transporte" { // Entrego solo con este test
+describe "transporte" { 
+  
+  test "el peso de las cosas del camion es par" {
+    camion.cargar(knightRider)
+    camion.cargar(bumblebee)
+
+    assert.that(camion.todoPesoPar())
+  }
+
+  test "hay alguno dentro del camion que tiene el peso que le indico" {
+    camion.cargar(knightRider)
+    camion.cargar(paqueteLadrillos)
+
+    assert.that(camion.hayAlgunoQuePesa(24))
+  }
+
+  test "devolver la primera cosa que contenga el camion con el nivel de peligrosidad que le indico" {
+    camion.cargar(knightRider)
+    camion.cargar(paqueteLadrillos)
+    camion.cargar(arenaAGranel)
+    camion.cargar(bateriaAntiaerea)
+
+    assert.equals(bateriaAntiaerea, camion.elDeNivel(100))
+  }
+
+  test "El peso total del camion" {
+    camion.cargar(knightRider)
+    camion.cargar(bumblebee)
+
+    assert.equals(2300, camion.pesoTotal())
+  }
+
+  test "El camion excedido de peso" {
+    camion.cargar(knightRider)
+    camion.cargar(bumblebee)
+    camion.cargar(bateriaAntiaerea)
+
+    assert.that(camion.excedidoDePeso())
+  }
+
+  test "Devolver cosas que superan el nivel de peligrosidad indicado" {
+    camion.cargar(knightRider)
+    camion.cargar(bumblebee)
+    camion.cargar(bateriaAntiaerea)
+    camion.cargar(arenaAGranel)
+
+    assert.equals(#{knightRider, bumblebee, bateriaAntiaerea}, camion.objetosQueSuperanPeligrosidad(5))
+  }
+
+  test "Devuelve las cosas mas peligrosas que la cosa indicada" {
+    camion.cargar(knightRider)
+    camion.cargar(bumblebee)
+    camion.cargar(bateriaAntiaerea)
+    camion.cargar(arenaAGranel)
+
+    assert.equals(#{knightRider, bumblebee, bateriaAntiaerea}, camion.objetosMasPeligrososQue(arenaAGranel))
+  }
+
+  test "Camion que puede circular en ruta si no tiene una cosa que supere el nivel maximo de peligrosidad indicado" {
+    camion.cargar(knightRider)
+    camion.cargar(bumblebee)
+
+    assert.that(camion.puedeCircularEnRuta(40))
+  }
+
+  test "El camion indica si tiene algo que pesa entre el min y el max" {
+    camion.cargar(knightRider)
+    camion.cargar(bumblebee)
+
+    assert.that(camion.tieneAlgoQuePesaEntre(500, 1000))
+  }
+
+  test "devuelve la cosa mas pesada que tiene el camion" {
+    camion.cargar(knightRider)
+    camion.cargar(bumblebee)
+    camion.cargar(bateriaAntiaerea)
+
+    assert.equals(bumblebee, camion.cosaMasPesada())
+  }
+
+  test "El camion devuelve una lista con los pesos de cada cosa que contiene" {
+    camion.cargar(knightRider)
+    camion.cargar(bumblebee)
+    camion.cargar(bateriaAntiaerea)
+    camion.cargar(arenaAGranel)
+
+    assert.equals([500, 800, 300, 21], camion.pesos())
+  }
+
+  test "El camion devuelve el total de los bultos que contiene" {
+    camion.cargar(knightRider)
+    camion.cargar(bumblebee)
+    camion.cargar(paqueteLadrillos)
+
+    assert.equals(4, camion.totalBultos())
+  }
+  
   test "transporte exitoso camino ruta 9" {
     camion.cargar(paqueteLadrillos)
 
@@ -39,4 +135,3 @@ describe "transporte" { // Entrego solo con este test
   }
 }
 
-// Me faltarian sumar más test 

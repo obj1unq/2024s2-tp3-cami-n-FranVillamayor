@@ -87,7 +87,7 @@ object contenedorPortuario {
 	}
 
 	method cantBultos() {
-		return contiene.size() + 1
+		return contiene.sum({contiene => contiene.cantBultos()}) + 1
 	  
 	} 
 
@@ -109,7 +109,7 @@ object contenedorPortuario {
 	}
 
 	method peligrosidadDeObjetoMasPeligroso() {
-		return contiene.filter({objeto => objeto.nivelPeligrosidad()}).max()
+		return contiene.max({objeto => objeto.nivelPeligrosidad()})
 	  
 	}
 }

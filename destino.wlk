@@ -5,6 +5,7 @@ import cosas.*
 
 object almacen {
     const property cosas = #{} 
+    var property capacidad = 3
 
     method irADestino(camion) {
         self.validarBultos()
@@ -22,7 +23,7 @@ object almacen {
     }
 
     method puedeDescargar() {
-      return self.totalBultos() + camion.totalBultos() <= 3
+      return self.totalBultos() + camion.totalBultos() <= self.capacidad()
     }
 
     method totalBultos() {
